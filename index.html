@@ -392,6 +392,34 @@
   }
   .pub-item a.doi-badge:hover{ border-color:var(--contour-soft); }
 
+  /* ===== Sertifika duvarı ===== */
+  .cw-stats{ display:flex; gap:32px; flex-wrap:wrap; margin:14px 0 6px; }
+  .cw-stat b{ display:block; font-family:var(--serif); font-size:32px; line-height:1.1; color:var(--ink); font-weight:600; }
+  .cw-stat span{ font-family:var(--mono); font-size:11.5px; color:var(--sand); }
+  .cw-topo{ display:block; width:100%; height:auto; margin:10px 0 2px; }
+  .cw-fill{ fill:var(--contour-soft); opacity:.14; }
+  .cw-ridge{ fill:none; stroke:var(--contour); stroke-width:1.4; stroke-linejoin:round; }
+  .cw-ground{ stroke:var(--rule); }
+  .cw-peak{ cursor:pointer; }
+  .cw-peak circle{ fill:var(--paper); stroke:var(--contour); stroke-width:2; }
+  .cw-peak.on circle{ fill:var(--accent-line); stroke:var(--accent-line); }
+  .cw-peak text{ font-family:var(--mono); text-anchor:middle; fill:var(--ink-soft); font-size:12.5px; }
+  .cw-peak .n{ font-size:13px; fill:var(--ink); }
+  .cw-cap{ font-size:12.5px; color:var(--ink-soft); margin:0 0 18px; }
+  .cw-chips{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+  .cw-chip{ font-family:var(--mono); font-size:12px; padding:5px 11px; border:1px solid var(--rule); border-radius:3px; background:var(--paper-alt); color:var(--ink-soft); cursor:pointer; }
+  .cw-chip.on{ background:var(--contour); border-color:var(--contour); color:var(--paper); }
+  .cw-search{ width:100%; max-width:340px; padding:8px 12px; margin-bottom:18px; border:1px solid var(--rule); border-radius:4px; background:var(--paper); color:var(--ink); font:14px var(--sans); }
+  .cw-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:12px; }
+  .cw-card{ display:flex; flex-direction:column; gap:6px; padding:14px 16px; border:1px solid var(--rule); border-radius:4px; background:var(--paper-alt); }
+  .cw-card h4{ margin:0; font:600 14.5px/1.35 var(--serif); color:var(--ink); }
+  .cw-card .d{ font-family:var(--mono); font-size:11px; color:var(--sand); }
+  .cw-card .m{ font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); }
+  .cw-card .tag{ align-self:flex-start; padding:1px 7px; border:1px solid var(--contour-soft); border-radius:3px; font-family:var(--mono); font-size:10.5px; color:var(--contour); }
+  .cw-card.feat{ grid-column:1 / -1; border-color:var(--contour); border-left:4px solid var(--accent-line); }
+  .cw-more{ font-family:inherit; background:none; cursor:pointer; }
+  .cw-empty{ color:var(--ink-soft); font-size:14px; }
+
   .skill-list{ margin-top:28px; }
   .skill-item{ margin-bottom:20px; }
   .skill-item h4{
@@ -985,7 +1013,9 @@
         <span class="cert-badge" data-en="Entropy-Based Land Diversity Analysis (2024)">Entropi Temelli Arazi Çeşitliliği Analizi (2024)</span>
       </div>
 
-      <p class="placeholder-note" style="margin-top:20px;" data-en="I also hold over 70 certified training, participation, and achievement certificates in areas including Artificial Intelligence, Data Science, Software, Social Entrepreneurship, Project Management, and Leadership.">Ayrıca Yapay Zekâ, Veri Bilimi, Yazılım, Sosyal Girişimcilik, Proje Yönetimi ve Liderlik alanlarında 70'ten fazla belgelendirilmiş eğitim, katılım ve başarı sertifikam bulunmaktadır.</p>
+      <hr class="rule">
+
+      <div id="cert-wall"></div>
     </section>
 
         <section class="panel" id="projeler" role="tabpanel" aria-labelledby="tab-projeler">
@@ -1168,6 +1198,172 @@
       document.querySelector('[data-tab="iletisim"]').click();
     });
   });
+
+  // ===== Sertifika duvarı =====
+  (function(){
+    const root = document.getElementById('cert-wall');
+    if(!root) return;
+    const I = {Y:['YÖK'],M:['T.C. ÇŞİDB · CBS Genel Müdürlüğü','T.C. Çevre, Şehircilik ve İklim Değişikliği Bakanlığı · Coğrafi Bilgi Sistemleri Genel Müdürlüğü'],T:['T3 Vakfı'],G:['GAİB','Güneydoğu Anadolu İhracatçı Birlikleri'],E:['EIT Food'],B:['BTK Akademi'],N:['Nilüfer Strateji'],U:['Bursa Uludağ Üniversitesi'],S:['Samsun Üniversitesi'],X:['TÜBİTAK'],V:['Bilim Virüsü'],C:['TÜCAUM','Türkiye Coğrafyası Araştırma ve Uygulama Merkezi'],L:['Bilgeİş'],A:['Global AI Hub'],K:['BUÜ Moleküler Biyoloji ve Genetik Topluluğu'],J:['Jeomorfoloji Derneği'],I:['İTÜ Avrasya Yer Bilimleri Enstitüsü'],F:['Foodback']};
+    const CATS = [['cbs','CBS & Afet','GIS & Disaster','CBS','GIS'],['saha','Jeomorfoloji & Saha','Geomorphology & Field','Saha','Field'],['kongre','Kongre & Sempozyum','Conferences','Kongre','Conf.'],['yz','Yapay Zekâ & Teknoloji','AI & Technology','Teknoloji','Tech'],['giris','Girişimcilik & Etki','Entrepreneurship & Impact','Girişim','Impact'],['tic','Dış Ticaret','Foreign Trade','Ticaret','Trade'],['gel','Gelişim & Diğer','Development & Other','Gelişim','Growth']];
+    const TAGS = {S:['Sözlü sunum','Oral presentation'],P:['Sözlü + poster sunum','Oral + poster presentation'],K:['Katılım ve Başarı belgesi','Participation & Achievement'],Q:['Seviye 4 · 16UY0254-4/00 · Nis 2031’e kadar geçerli','Level 4 · 16UY0254-4/00 · valid until Apr 2031']};
+    const MO = [['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'],['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']];
+    const UI = {head:['Sertifika duvarı','Certificate wall'],n:['sertifika','certificates'],i:['kurum','institutions'],y:['yıl aralığı','years covered'],all:['Tümü','All'],ph:['Sertifika veya kurum ara…','Search certificate or institution…'],more:['Tümünü göster','Show all'],none:['Sonuç bulunamadı.','No results.'],cap:['Her tepe bir alan, yükseklik sertifika sayısı. Tıklayarak filtreleyin.','Each peak is a field; height is the number of certificates. Click to filter.']};
+    const D = [
+['yz','2026-06','Y','Veri Analizi Okulu - Yapay Zeka ve Makine Öğrenmesi','K'],
+['cbs','2026-04','M','Coğrafi Bilgi Sistemleri Operatörü','Q'],
+['yz','2025-09','T','Su Altı Sistemleri'],
+['yz','2025-09','G','Uygulamalı Yapay Zeka Atölyesi'],
+['giris','2025-09','E','Gıdada Etki Girişimciliği Kampı 2025'],
+['yz','2025-09','B','Microsoft Excel Temelleri'],
+['giris','2025-09','N','Topluluk Oluşturma ve Yönetme'],
+['gel','2025-08','U','Yetkinlik Bazlı Mülakat Teknikleri'],
+['yz','2025-08','B','Dijital Okuryazarlık'],
+['giris','2025-04','N','Sosyal Girişim Hukuku ve Tüzel Kişilik'],
+['yz','2025-01','G','Uygulamalı Yapay Zeka Atölyesi'],
+['yz','2025-01','L','Programlamanın Temelleri'],
+['gel','2025-01','L','İlk Yardım'],
+['kongre','2024-10','S','XII. Ulusal Hidroloji Kongresi','S'],
+['cbs','2024-12','X','Arazi Çeşitliliğinin Entropi Temelli Algoritmalar ile Hesaplanması ve Haritalanması'],
+['gel','2024-11','V','O İş Bende'],
+['kongre','2024-10','C','TÜCAUM Uluslararası Coğrafya Sempozyumu 2024','S'],
+['kongre','2024-10','J','Uluslararası Jeomorfoloji Sempozyumu 2024','S'],
+['kongre','2024-11','I','XI. Türkiye Kuvaterner Sempozyumu','P'],
+['cbs','2024-10','X','Afet Durumlarında Sürdürülebilir Lojistik ve Risk Yönetimi'],
+['tic','2024-12','G','Yeni Yılda Ekonomiden Beklentiler'],
+['gel','2024-05','U','Uluslararası Şirketlerde Başarılı Bir Kariyer İçin Yapılması Gerekenler'],
+['gel','2024-05','U','Başarılı Mülakatın Şifreleri'],
+['gel','2024-03','L','Yiyecek İçecek Servisi'],
+['yz','2024-03','L','Dronlar ve Ticari Amaçlı Kullanımları'],
+['gel','2024-01','B','Sunum Teknikleri ve İletişim Yönetimi'],
+['gel','2024-01','G','Hayır Diyebilme Sanatı'],
+['cbs','2023-12','X','Sürdürülebilirlik Çerçevesinde Arazi Kullanımının Uzaktan Algılama Teknikleri İle İzlenmesi'],
+['tic','2023-12','G','Yeni Yılda Ekonomiden Beklentiler'],
+['gel','2023-10','U','Sanatla Farkındalık Geliştirme Atölyesi'],
+['gel','2023-08','U','Kişisel Gelişim Seminerleri'],
+['giris','2023-05','F','Gıda ve Tarım Sektöründe Etki Odaklı Kariyer Geliştirme Programı'],
+['gel','2023-05','U','Mülakatta Başarı İçin Ne Yapılmalı, Nelere Dikkat Edilmeli?'],
+['tic','2023-05','G','Ülke Bilgilendirme Günü (İtalya, Almanya, Birleşik Krallık)'],
+['tic','2023-05','G','Sürdürülebilir İş Modeli ve Amaç Odaklı Marka'],
+['tic','2023-05','G','İhracatta İstatistiksel Verilerin Yorumlanması ve Pazara Giriş Stratejileri'],
+['gel','2023-04','G','Yaralarımızı İyileştirmek - Güven Atölyesi'],
+['gel','2023-04','L','Etkili Sunumun Psikolojik Temelleri'],
+['giris','2023-03','N','Sosyal Sorun Haritalama Eğitimi'],
+['gel','2023-01','G','Ofiste ve Hayatta Verimliliğin Şifreleri'],
+['cbs','2022-12','U','Coğrafi Bilgi Sistemleri (CBS) Günü'],
+['giris','2022-11','N','Ekip Oluşturma ve Organizasyonel Yönetim'],
+['giris','2022-10','N','Tasarım Odaklı Düşünme Atölyesi'],
+['gel','2022-10','U','Sanatla Farkındalık Geliştirme Atölyesi'],
+['giris','2022-09','N','Sosyal Girişimciler İçin Etkili Sosyal Medya Kullanımı'],
+['gel','2022-09','G','İş Akdinin Feshinde Sosyal İlişki Yönetimi'],
+['giris','2022-06','N','Sosyal Girişimler İçin Markalaşma ve Pazara Erişim'],
+['tic','2022-06','G','Mikro İhracat'],
+['tic','2022-06','G','Dış Ticarette Satış Tekniklerine Dair Yeni Yaklaşımlar'],
+['tic','2022-06','G','Dış Ticarette Risk Kavramı ve Risk Yönetimi'],
+['gel','2022-06','G','Dijital İletişimde Görgü Kuralları'],
+['gel','2022-05','U','Etkili İletişim, Beden Dili ve Diksiyon Atölyesi'],
+['gel','2022-05','U','Sanatla Farkındalık Geliştirme Atölyesi'],
+['saha','2022-05','U','Kıyı ve Akarsu Jeomorfolojik Şekillerinin Belirlenmesi, Veri Toplama ve Haritalama Teknik Gezisi'],
+['saha','2021-11','U','Dudaklı Seli (2020) ile İlgili Veri Toplama, Veri Güncelleme, Tehlike Analizi ve Haritalama Teknik Gezisi'],
+['gel','2021-11','G','Kolay ve Kalıcı Öğrenme İçin Hafıza Teknikleri'],
+['gel','2021-09','V','Geç Olmadan'],
+['gel','2021-09','G','Pandemi Sonrası Psikolojik Sağlığı Korumak'],
+['gel','2021-09','G','Kuşaklar Arası Yönetim'],
+['tic','2021-09','G','Marka Yaratma'],
+['tic','2021-09','G','Maliyet Muhasebesi'],
+['tic','2021-09','G','Gümrük İşlemlerinde Cezai Hükümler ve Uygulamaları'],
+['yz','2021-08','A','Yapay Zekaya İlk Adım'],
+['yz','2021-08','G','Microsoft Word’de Bilinmesi Gerekenler'],
+['tic','2021-08','G','Ülkelere Göre Müzakere Becerileri'],
+['tic','2021-08','G','TradeMap Uygulamaları'],
+['tic','2021-08','G','Kur Riski Yönetimi'],
+['tic','2021-08','G','Avrupa Yeşil Mutabakatı’na Uyumda Çevre Vergileri ve Teşviklerin Rolü: Kayıplar ve Kazançlar'],
+['cbs','2021-05','X','Van Gölü Kıyı Alanlarının Planlama ve Yönetimi'],
+['cbs','2021-05','X','Coğrafi Bilgi Sistemleri (CBS) ve Doğal Afetler'],
+['gel','2021-04','X','Gastronomide Bilim ve Teknik: Mutfakta Mühendis Var-2'],
+['gel','2021-03','K','1. Ulugen Bilim Günleri'],
+['gel','2020-12','U','İş Hayatına Hazırlık Seminerleri'],
+['saha','2019-11','U','Faylar, Çek-Ayır Havzaları, Alüvyal Yatak Formları (Menderes ve Örgülü Yatak), Taşkın Ovası, Boğaz Vadi Oluşumu Teknik Gezisi'],
+['saha','2019-04','U','Kart, Flüvyal Aşındırma ve Biriktirme Şekilleri, Akarsu Hidrolojisi Teknik Gezisi'],
+['saha','2018-11','U','KAF Oluşumu, Faylar, Çek-Ayır Havzaları, Boğaz Oluşumu, Yalıtaşları, Jeomorfoloji - Litoloji Etkileşimi Teknik Gezisi']
+    ].sort((a,b) => a[1] < b[1] ? 1 : a[1] > b[1] ? -1 : 0);
+
+    const LIMIT = 24;
+    let cat = null, q = '', all = false;
+    const en = () => document.documentElement.getAttribute('lang') === 'en';
+    const t = a => en() ? a[1] : a[0];
+    const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+    const mon = ym => MO[en() ? 1 : 0][+ym.slice(5) - 1] + ' ' + ym.slice(0,4);
+
+    root.innerHTML =
+      '<div class="panel-eyebrow" id="cw-head" style="margin-top:0"></div>' +
+      '<div class="cw-stats" id="cw-stats"></div>' +
+      '<svg class="cw-topo" id="cw-topo" viewBox="0 0 560 150" role="img" aria-label="Sertifika dağılımı"></svg>' +
+      '<p class="cw-cap" id="cw-cap"></p>' +
+      '<div class="cw-chips" id="cw-chips"></div>' +
+      '<input class="cw-search" id="cw-q" type="search" autocomplete="off">' +
+      '<div class="cw-grid" id="cw-grid"></div>' +
+      '<button class="btn-cv cw-more" id="cw-more" hidden></button>';
+    const $ = id => document.getElementById(id);
+
+    function stats(){
+      const yrs = D.map(d => +d[1].slice(0,4));
+      const v = [[D.length,UI.n],[new Set(D.map(d => d[2])).size,UI.i],[Math.min(...yrs) + '–' + Math.max(...yrs),UI.y]];
+      $('cw-stats').innerHTML = v.map(x => '<div class="cw-stat"><b>' + x[0] + '</b><span>' + t(x[1]) + '</span></div>').join('');
+    }
+    function topo(){
+      const W = 560, B = 118;
+      const c = CATS.map(k => D.filter(d => d[0] === k[0]).length), mx = Math.max(...c);
+      const h = c.map(v => 20 + 78 * v / mx), xs = c.map((_, i) => 40 + i * 80);
+      const base = [[0, B - 8]];
+      xs.forEach((x, i) => { base.push([x, B - h[i]]); if(i < xs.length - 1) base.push([x + 40, B - 10 - ((i * 7) % 6)]); });
+      base.push([W, B - 8]);
+      const line = k => base.map(p => [p[0], B - (B - p[1]) * k]);
+      const pts = a => a.map(p => p.join(',')).join(' ');
+      let s = '<polygon class="cw-fill" points="' + pts(line(1)) + ' ' + W + ',' + B + ' 0,' + B + '"/>';
+      [1, .64, .34].forEach((k, i) => { s += '<polyline class="cw-ridge" style="opacity:' + [1, .55, .3][i] + '" points="' + pts(line(k)) + '"/>'; });
+      s += '<line class="cw-ground" x1="0" y1="' + B + '" x2="' + W + '" y2="' + B + '"/>';
+      CATS.forEach((k, i) => {
+        const on = cat === k[0], y = B - h[i];
+        s += '<g class="cw-peak' + (on ? ' on' : '') + '" data-c="' + k[0] + '"><title>' + esc(t([k[1], k[2]])) + ': ' + c[i] + '</title>' +
+             '<circle cx="' + xs[i] + '" cy="' + y + '" r="' + (on ? 7 : 5) + '"/>' +
+             '<text class="n" x="' + xs[i] + '" y="' + (y - 12) + '">' + c[i] + '</text>' +
+             '<text x="' + xs[i] + '" y="' + (B + 20) + '">' + esc(en() ? k[4] : k[3]) + '</text></g>';
+      });
+      $('cw-topo').innerHTML = s;
+    }
+    function chips(){
+      $('cw-chips').innerHTML = '<button class="cw-chip' + (cat ? '' : ' on') + '" data-c="">' + t(UI.all) + ' ' + D.length + '</button>' +
+        CATS.map(k => '<button class="cw-chip' + (cat === k[0] ? ' on' : '') + '" data-c="' + k[0] + '">' + esc(t([k[1], k[2]])) + ' ' + D.filter(d => d[0] === k[0]).length + '</button>').join('');
+    }
+    function grid(){
+      const qq = q.toLocaleLowerCase('tr');
+      const list = D.filter(d => (!cat || d[0] === cat) && (!qq || (d[3] + ' ' + I[d[2]].join(' ')).toLocaleLowerCase('tr').indexOf(qq) > -1));
+      const shown = all ? list : list.slice(0, LIMIT);
+      $('cw-grid').innerHTML = shown.length ? shown.map(d =>
+        '<div class="cw-card' + (d[4] === 'Q' ? ' feat' : '') + '"><span class="d">' + mon(d[1]) + '</span><h4>' + esc(d[3]) + '</h4>' +
+        '<span class="m"' + (I[d[2]][1] ? ' title="' + esc(I[d[2]][1]) + '"' : '') + '>' + esc(I[d[2]][0]) + '</span>' +
+        (d[4] ? '<span class="tag">' + esc(t(TAGS[d[4]])) + '</span>' : '') + '</div>').join('') : '<p class="cw-empty">' + t(UI.none) + '</p>';
+      const more = $('cw-more');
+      more.hidden = all || list.length <= LIMIT;
+      more.textContent = t(UI.more) + ' (' + list.length + ')';
+    }
+    function render(){
+      $('cw-head').textContent = t(UI.head);
+      $('cw-cap').textContent = t(UI.cap);
+      $('cw-q').placeholder = t(UI.ph);
+      stats(); topo(); chips(); grid();
+    }
+    function pick(c){ cat = (c && c !== cat) ? c : null; all = false; topo(); chips(); grid(); }
+
+    root.addEventListener('click', e => {
+      const el = e.target.closest('[data-c]');
+      if(el) pick(el.getAttribute('data-c'));
+      else if(e.target.id === 'cw-more'){ all = true; grid(); }
+    });
+    $('cw-q').addEventListener('input', e => { q = e.target.value.trim(); all = false; grid(); });
+    new MutationObserver(render).observe(document.documentElement, {attributes:true, attributeFilter:['lang']});
+    render();
+  })();
 
   (function(){
     const root = document.documentElement;
